@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Chatアプリ</title>
+  </head>
+  <header>
+    <h1>New LINE</h1>
+  </header>
+
+  <body>
+    <!-- コンテンツ表示画面 -->
+    <div class="main">
+      <div class="talk_box">
+        <div id="output"></div>
+      </div>
+
+      <div class="input_box">
+        <div class="character"></div>
+        <div>名前：<input type="text" id="uname" /></div>
+        <div>
+          <textarea id="text" cols="40" rows="6"></textarea>
+        </div>
+        <button id="send">
+          送信
+        </button>
+      </div>
+    </div>
+
+    <!--/ コンテンツ表示画面 -->
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- JQuery -->
+
+    <!--** 以下Firebase **-->
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: 'AIzaSyAvx2rX78f-DhBXklpX07XslagnGdygpzM',
+        authDomain: 'dev17-556b8.firebaseapp.com',
+        databaseURL: 'https://dev17-556b8.firebaseio.com',
+        projectId: 'dev17-556b8',
+        storageBucket: 'dev17-556b8.appspot.com',
+        messagingSenderId: '681909702150',
+        appId: '1:681909702150:web:374cc8d66a2cb77acd7d87',
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      const ref = firebase.database().ref(); //.ref()=ユニークキーを自動で降ってください
+
+      const date = new Date();
+
+      //関数定義
+      function send() {
+        const uname = $('#uname').val();
+        const time =
+          date.getFullYear() +
+          '年' +
+          (date.getMonth() + 1) +
+          '月' +
+          date.getDate() +
+          '日' +
+          date.getHours() +
+          '時' +
+          date.getMinutes() +
+          '分';
+        const text = $('#text').val();
+        const msg = {
+          uname: uname,
+          time: time,
+          text: text,
+        };
+        ref.push(msg); //set = 決まった名前、push=ユニーク setは上書きになる
+        pageDown();
+
+        // $('html, body').animate({ scrollTop: $('body').get(0).scrollHeight });
+      }
+
+      //文字を送信
+      $('#send').on('click', function () {
+        send();
+      });
+
+      //受信処理
+      ref.on('child_added', function (data) {
+        const v = data.val(); //送信されたオブジェクトを取得
+        const k = data.key; //ユニークキーの取得
+        const h =
+          '<div class="baloon_l"><div class="faceicon"><img src="imgs/buke.png" alt="" ><p class="name">' +
+          v.uname +
+          '</p></div><div class = "talk"><p class="says"><br>' +
+          v.text +
+          '<br>' +
+          v.time +
+          '</p></div></div>';
+        $('#output').append(h);
+      });
+
+      //イベント情報取得
+      $('#text').on('keydown', function (e) {
+        // console.log(e);
+        if (e.keyCode == 13) {
+          send();
+        }
+      });
+
+      //最下部に移動
+      function pageDown() {
+        let a = document.documentElement;
+        let y = a.scrollHeight - a.clientHeight;
+        window.scroll(0, y);
+      }
+
+      //クリックで座標が取れる
+      //   $('body').on('click', function (e) {
+      //     console.log(e);
+      //   });
+
+      // overflow:auto;で決めた部分でスクロール
+
+      //最後の文書をクリックしたタイミングで表示
+    </script>
+  </body>
+</html>
