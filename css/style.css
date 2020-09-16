@@ -67,7 +67,7 @@ img {
 
 .talk {
   width: 500px;
-  padding: 15px;
+  padding: 10px;
   margin: 10px;
   border-radius: 12px;
   background: #99dddd; /*色は任意*/
@@ -82,4 +82,23 @@ img {
   width: 100px;
   height: 100px;
   border: solid 1px;
+}
+
+.character_box {
+  margin: 4px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.character_img {
+  width: 60px;
+  cursor: pointer;
+}
+
+.input_name {
+  margin: 4px;
+}
+
+#uname {
+  margin: 4px;
 }

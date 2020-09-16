@@ -17,14 +17,19 @@
       </div>
 
       <div class="input_box">
-        <div class="character"></div>
-        <div>名前：<input type="text" id="uname" /></div>
+        <div class="input_container">
+          <div class="character_box">
+            <img class="character_img" id="num_1" src="imgs/buke.png" alt="" />
+            <img class="character_img" id="num_2" src="imgs/caram.png" alt="" />
+            <img class="character_img" id="num_3" src="imgs/tuku.jpg" alt="" />
+          </div>
+          <div class="input_name">name<input type="text" id="uname" /></div>
+        </div>
+
         <div>
           <textarea id="text" cols="40" rows="6"></textarea>
         </div>
-        <button id="send">
-          送信
-        </button>
+        <button id="send">送信</button>
       </div>
     </div>
 
@@ -61,33 +66,55 @@
 
       //関数定義
       function send() {
-        const uname = $('#uname').val();
-        const time =
-          date.getFullYear() +
-          '年' +
-          (date.getMonth() + 1) +
-          '月' +
-          date.getDate() +
-          '日' +
-          date.getHours() +
-          '時' +
-          date.getMinutes() +
-          '分';
-        const text = $('#text').val();
-        const msg = {
-          uname: uname,
-          time: time,
-          text: text,
-        };
-        ref.push(msg); //set = 決まった名前、push=ユニーク setは上書きになる
-        pageDown();
+        let text_send = null;
+        //テキストエリアに文字が入力されている場合、trueを返す
+        if ($('#text').val()) {
+          text_send = true;
+        } else {
+          //入力されていない場合、送信していいか確認する
+          const result = confirm('未入力のまま送信しますか？');
+          if (result) {
+            text_send = true;
+          } else {
+            return;
+          }
+        }
+
+        if (text_send == true) {
+          const uname = $('#uname').val();
+          const time =
+            date.getFullYear() +
+            '年' +
+            (date.getMonth() + 1) +
+            '月' +
+            date.getDate() +
+            '日' +
+            date.getHours() +
+            '時' +
+            date.getMinutes() +
+            '分';
+          const text = $('#text').val();
+          const msg = {
+            uname: uname,
+            time: time,
+            text: text,
+          };
+          ref.push(msg); //set = 決まった名前、push=ユニーク setは上書きになる
+          pageDown();
+          deleteInput();
+        }
 
         // $('html, body').animate({ scrollTop: $('body').get(0).scrollHeight });
       }
 
       //文字を送信
+
       $('#send').on('click', function () {
-        send();
+        if ($('#uname').val()) {
+          send();
+        } else {
+          alert('名前を入れてください！');
+        }
       });
 
       //受信処理
@@ -105,11 +132,16 @@
         $('#output').append(h);
       });
 
-      //イベント情報取得
+      //イベント情報取得・エンターで送信
+
       $('#text').on('keydown', function (e) {
         // console.log(e);
         if (e.keyCode == 13) {
-          send();
+          if ($('#uname').val()) {
+            send();
+          } else {
+            alert('名前を入れてください！');
+          }
         }
       });
 
@@ -119,6 +151,23 @@
         let y = a.scrollHeight - a.clientHeight;
         window.scroll(0, y);
       }
+
+      //入力したテキストを削除
+      function deleteInput() {
+        $('#text').val('');
+        $('#uname').val('');
+        document.getElementById('text').blur();
+        document.getElementById('uname').blur();
+      }
+
+      //キャラクターを選択
+      $('#character_img').on('click', function () {
+        if (condition) {
+        }
+        $('#num_1').attr('value', 'on');
+      });
+
+      //キャラクタークリックでトーク画面に反映
 
       //クリックで座標が取れる
       //   $('body').on('click', function (e) {
