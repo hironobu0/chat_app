@@ -8,12 +8,13 @@ header {
 
 h1 {
   font-size: 30px;
+  padding: 20px;
 }
 
 textarea {
-  font-size: ３0px;
+  font-size: 30px;
   resize: none;
-  width: 700px;
+  width: 781px;
   height: 95px;
 }
 
@@ -100,5 +101,6 @@ img {
 }
 
 #uname {
+  width: 200px;
   margin: 4px;
 }
